@@ -1,42 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Due Mari Chapter Harley Davidson Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Harley Davidson Color Palette */
+    --background: 0 0% 8%;
+    --foreground: 0 0% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 25 100% 50%;        /* Harley Orange */
+    --primary-foreground: 0 0% 8%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 16%;         /* Dark charcoal */
+    --secondary-foreground: 0 0% 90%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 25 100% 55%;         /* Bright orange accent */
+    --accent-foreground: 0 0% 8%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 0 0% 20%;
+    --input: 0 0% 16%;
+    --ring: 25 100% 50%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Custom Harley themed colors */
+    --harley-orange: 25 100% 50%;
+    --harley-orange-dark: 25 90% 40%;
+    --harley-silver: 0 0% 75%;
+    --harley-chrome: 0 0% 85%;
+    --harley-black: 0 0% 8%;
+    --harley-charcoal: 0 0% 16%;
+
+    /* Gradients */
+    --gradient-harley: linear-gradient(135deg, hsl(var(--harley-orange)), hsl(var(--harley-orange-dark)));
+    --gradient-metal: linear-gradient(145deg, hsl(var(--harley-silver)), hsl(var(--harley-chrome)));
+    --gradient-dark: linear-gradient(180deg, hsl(var(--background)), hsl(var(--harley-charcoal)));
+
+    /* Shadows */
+    --shadow-glow: 0 0 30px hsl(var(--harley-orange) / 0.3);
+    --shadow-metal: 0 8px 25px hsl(0 0% 0% / 0.4);
+    --shadow-inset: inset 0 2px 4px hsl(0 0% 0% / 0.3);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +123,59 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-roboto;
+    background: var(--gradient-dark);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-oswald;
+  }
+}
+
+@layer utilities {
+  /* Harley themed utilities */
+  .text-harley-orange {
+    color: hsl(var(--harley-orange));
+  }
+  
+  .text-harley-silver {
+    color: hsl(var(--harley-silver));
+  }
+  
+  .bg-harley-gradient {
+    background: var(--gradient-harley);
+  }
+  
+  .bg-metal-gradient {
+    background: var(--gradient-metal);
+  }
+  
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .shadow-metal {
+    box-shadow: var(--shadow-metal);
+  }
+  
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+  
+  .transition-bounce {
+    transition: var(--transition-bounce);
+  }
+
+  /* Custom button effects */
+  .btn-harley {
+    @apply bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold;
+    @apply shadow-metal transition-smooth;
+    @apply hover:shadow-glow hover:scale-105;
+  }
+  
+  .btn-metal {
+    @apply bg-metal-gradient text-harley-black px-6 py-2 rounded-md font-medium;
+    @apply shadow-metal transition-smooth;
+    @apply hover:scale-105;
   }
 }
