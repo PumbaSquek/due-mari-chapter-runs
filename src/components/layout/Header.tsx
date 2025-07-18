@@ -94,9 +94,11 @@ const Header = () => {
                     <span>Profilo</span>
                   </DropdownMenuItem>
                   {isAdmin && (
-                    <DropdownMenuItem>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Dashboard Admin</span>
+                    <DropdownMenuItem asChild>
+                      <NavLink to="/admin" className="flex items-center">
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Dashboard Admin</span>
+                      </NavLink>
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
@@ -157,6 +159,14 @@ const Header = () => {
                         <p className="text-xs text-primary font-medium">Amministratore</p>
                       )}
                     </div>
+                    {isAdmin && (
+                      <NavLink to="/admin" onClick={() => setIsMenuOpen(false)}>
+                        <Button variant="outline" className="w-full mb-2">
+                          <Settings className="mr-2 h-4 w-4" />
+                          Dashboard Admin
+                        </Button>
+                      </NavLink>
+                    )}
                     <Button onClick={signOut} variant="outline" className="w-full">
                       <LogOut className="mr-2 h-4 w-4" />
                       Disconnetti

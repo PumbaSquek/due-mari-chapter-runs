@@ -8,7 +8,6 @@ interface AuthContextType {
   session: Session | null;
   isLoading: boolean;
   isAdmin: boolean;
-  signUp: (email: string, password: string, userData?: { firstName?: string; lastName?: string }) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
@@ -75,48 +74,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, userData?: { firstName?: string; lastName?: string }) => {
-    try {
-      setIsLoading(true);
-      const redirectUrl = `${window.location.origin}/`;
-      
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            first_name: userData?.firstName || '',
-            last_name: userData?.lastName || ''
-          }
-        }
-      });
-
-      if (error) {
-        toast({
-          title: "Errore durante la registrazione",
-          description: error.message,
-          variant: "destructive"
-        });
-      } else {
-        toast({
-          title: "Registrazione completata",
-          description: "Controlla la tua email per confermare l'account"
-        });
-      }
-
-      return { error };
-    } catch (error: any) {
-      toast({
-        title: "Errore",
-        description: "Si è verificato un errore imprevisto",
-        variant: "destructive"
-      });
-      return { error };
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -176,7 +133,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     session,
     isLoading,
     isAdmin,
-    signUp,
     signIn,
     signOut
   };

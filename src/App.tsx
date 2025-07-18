@@ -11,6 +11,7 @@ import EventiPage from "./pages/EventiPage";
 import MembriPage from "./pages/MembriPage";
 import GalleriaPage from "./pages/GalleriaPage";
 import AuthPage from "./pages/AuthPage";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,15 +26,16 @@ const App = () => (
           <div className="min-h-screen flex flex-col">
             <Header />
             <main className="flex-1">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/eventi" element={<EventiPage />} />
-                <Route path="/membri" element={<MembriPage />} />
-                <Route path="/galleria" element={<GalleriaPage />} />
-                <Route path="/auth" element={<AuthPage />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/eventi" element={<EventiPage />} />
+                  <Route path="/membri" element={<MembriPage />} />
+                  <Route path="/galleria" element={<GalleriaPage />} />
+                  <Route path="/auth" element={<AuthPage />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
             </main>
             <Footer />
           </div>
