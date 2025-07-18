@@ -1,10 +1,21 @@
 import { useState } from 'react';
-import { Menu, X, Calendar, Users, Camera, Home } from 'lucide-react';
+import { Menu, X, Calendar, Users, Camera, Home, LogOut, User, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, isAdmin, signOut } = useAuth();
 
   const navItems = [
     { to: '/', label: 'Home', icon: Home },
@@ -48,11 +59,60 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Login Button */}
+          {/* User Menu / Login Button */}
           <div className="hidden md:block">
-            <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-              Login
-            </Button>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {user.email?.charAt(0).toUpperCase() || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {user.user_metadata?.first_name || user.email}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                      {isAdmin && (
+                        <p className="text-xs leading-none text-primary font-medium">
+                          Amministratore
+                        </p>
+                      )}
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profilo</span>
+                  </DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Dashboard Admin</span>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Disconnetti</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <NavLink to="/auth">
+                <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                  Login
+                </Button>
+              </NavLink>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -88,9 +148,27 @@ const Header = () => {
                 </NavLink>
               ))}
               <div className="pt-4 border-t border-border">
-                <Button variant="outline" className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                  Login
-                </Button>
+                {user ? (
+                  <div className="space-y-2">
+                    <div className="px-4 py-2 text-sm">
+                      <p className="font-medium">{user.user_metadata?.first_name || user.email}</p>
+                      <p className="text-xs text-muted-foreground">{user.email}</p>
+                      {isAdmin && (
+                        <p className="text-xs text-primary font-medium">Amministratore</p>
+                      )}
+                    </div>
+                    <Button onClick={signOut} variant="outline" className="w-full">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Disconnetti
+                    </Button>
+                  </div>
+                ) : (
+                  <NavLink to="/auth">
+                    <Button variant="outline" className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                      Login
+                    </Button>
+                  </NavLink>
+                )}
               </div>
             </nav>
           </div>
