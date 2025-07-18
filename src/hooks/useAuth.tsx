@@ -8,7 +8,7 @@ interface AuthContextType {
   session: Session | null;
   isLoading: boolean;
   isAdmin: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (identifier: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
 
@@ -75,13 +75,38 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (identifier: string, password: string) => {
     try {
       setIsLoading(true);
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+      let error = null;
+
+      // Check if trying to login as admin
+      if (identifier.toLowerCase() === 'admin') {
+        const { error: authError } = await supabase.auth.signInWithPassword({
+          email: 'admin@duemari.com',
+          password
+        });
+        error = authError;
+      } else {
+        // Login with fiscal code
+        const { data: authData, error: rpcError } = await supabase
+          .rpc('authenticate_by_fiscal_code' as any, {
+            input_codice_fiscale: identifier,
+            input_password: password
+          });
+
+        if (rpcError || !authData || (Array.isArray(authData) && authData.length === 0)) {
+          error = { message: 'Credenziali non valide o utente non approvato' };
+        } else {
+          // Create a session for the authenticated user
+          const userData = Array.isArray(authData) ? authData[0] : authData;
+          const { error: signInError } = await supabase.auth.signInWithPassword({
+            email: userData.email,
+            password
+          });
+          error = signInError;
+        }
+      }
 
       if (error) {
         toast({

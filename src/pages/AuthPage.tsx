@@ -11,7 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 const AuthPage = () => {
-  const [loginEmail, setLoginEmail] = useState('');
+  const [loginIdentifier, setLoginIdentifier] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -34,7 +34,7 @@ const AuthPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    const { error } = await signIn(loginEmail, loginPassword);
+    const { error } = await signIn(loginIdentifier, loginPassword);
     
     if (!error) {
       navigate('/');
@@ -127,13 +127,13 @@ const AuthPage = () => {
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="login-email">Email</Label>
+                    <Label htmlFor="login-identifier">Codice Fiscale / Username Admin</Label>
                     <Input
-                      id="login-email"
-                      type="email"
-                      placeholder="la-tua-email@esempio.com"
-                      value={loginEmail}
-                      onChange={(e) => setLoginEmail(e.target.value)}
+                      id="login-identifier"
+                      type="text"
+                      placeholder="Inserisci il tuo codice fiscale o 'admin'"
+                      value={loginIdentifier}
+                      onChange={(e) => setLoginIdentifier(e.target.value)}
                       required
                       disabled={isSubmitting}
                     />
